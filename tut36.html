@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Tut!</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .left {
+      flex: 1;
+      background: #fff;
+      text-align: left;
+      font-family: Helvetica, sans-serif  
+    }
+
+    .leftTitle{
+      align-items: center;
+      justify-content: center;
+      text-align: left;
+      font-size: 8vw;
+      font-weight: bold;
+      color: ##000;
+      padding: 3rem;
+      box-sizing: border-box;
+      display: block;
+    }
+
+    .leftSubtitle{
+      font-size:1.6vw;
+      display: block;
+      padding: 3rem;
+      font-weight: 300;
+
+    }
+
+    .right {
+      flex: 1;
+      background: #fff;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 4px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .right img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Lightbox Styles */
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 80vh;
+    }
+
+    .lightbox .controls {
+      margin-top: 10px;
+      color: white;
+      font-size: 2rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .lightbox button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="left">
+        <div class="leftTitle">
+          Happy Birthday Tut!!!
+        </div>
+        <div class="leftSubtitle">
+          Here are 36 reasons why we love you so so much:
+        </div>
+    </div>
+  <div class="right" id="gallery">
+    <!-- 36 images -->
+    <script>
+      for (let i = 1; i <= 36; i++) {
+        const padded = String(i).padStart(2, '0');
+        document.write(`<img src="images/thumbs/${padded}.jpg" data-full="images/${padded}.png" alt="photo ${i}" onclick="openLightbox(${i - 1})" />`);
+      }
+    </script>
+  </div>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-image" src="" alt="Large View"/>
+  <div class="controls">
+    <button onclick="prevImage()">⟨</button>
+    <button onclick="closeLightbox()">✖</button>
+    <button onclick="nextImage()">⟩</button>
+  </div>
+</div>
+
+<script>
+  const galleryImages = Array.from(document.querySelectorAll('#gallery img'));
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.getElementById('lightbox-image');
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    currentIndex = index;
+    updateLightbox();
+    lightbox.style.display = 'flex';
+  }
+
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+  }
+
+  function updateLightbox() {
+    const fullImg = galleryImages[currentIndex].getAttribute('data-full');
+    lightboxImage.src = fullImg;
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % galleryImages.length;
+    updateLightbox();
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+    updateLightbox();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.style.display === 'flex') {
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'Escape') closeLightbox();
+    }
+  });
+</script>
+
+</body>
+</html>
